@@ -3,9 +3,9 @@ angular
 .controller("roadController",
 function($scope, $interval, $sce){
 	// variables:
-	$scope.size = 23;
+	$scope.size = 50;
 	$scope.lanes = 3; // 2, 3, 4, 5
-	$scope.max_speed = 60; // 30, 60, 90
+	$scope.max_speed = 90; // 30, 60, 90
 	$scope.flux = 80;
 
 	$scope.playing = false;
@@ -53,6 +53,7 @@ function($scope, $interval, $sce){
 
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
 	var chanceToBeSlower = function(l){
+//		return 20;
 		var lanes = $scope.lanes;
 		if(l > lanes) return 0;
 		var chanceToBeSlower = 10; // default = 10% of chance of a slower vehicle;
@@ -77,6 +78,23 @@ function($scope, $interval, $sce){
 	};
 
 	var go = function(){
+
+		function moveCar(car, l, i){
+			car = car.move();
+			if(car.getI() > $scope.size){
+				// car finished
+				$scope.carstotal ++;
+				map[l][i] = null;
+				delete(car);
+				return false;
+			} else {
+				$scope.carsnow ++;
+				map[l][i] = null;
+				map[l][car.getI()] = car;
+				return true;
+			}
+		};
+
 		// let's go each cell
 		$scope.carsnow = 0;
 		for(var l=0; l<$scope.lanes; l++){
@@ -84,21 +102,22 @@ function($scope, $interval, $sce){
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
 				if(car){
-					car = car.move();
-					if(car.getI() > $scope.size){
-						// car finished
-						$scope.carstotal ++;
-						map[l][i] = null;
-						delete(car);
+					if( car.speed < car.max_speed ){
+						// car will try to do something to speed up after moving
+						if( moveCar(car, l, i) ){
+							if(lastcar > breaking_distance){
+								car.speedUp();
+							} else {
+
+							}
+						}
 					} else {
-						car.frontCarAt(lastcar);
-						$scope.carsnow ++;
-						map[l][i] = null;
-						map[l][car.getI()] = car;
-						lastcar = 1;
+						// car at max speed. just move.
+						if( moveCar(car, l, i) ){
+							car.frontCarAt(lastcar);
+						}
 					}
-				} else {
-					lastcar ++;
+					lastcar = car.position;
 				} 
 			}
 			if(lastcar > breaking_distance){

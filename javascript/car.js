@@ -33,6 +33,12 @@ var car = function(){
 		this.calculateAvance();
 		if(this.speed == 0) this.status = "s"; else this.status = "b";
 	};
+	this.speedUp = function(){
+		if( this.speed = this.max_speed ) return;
+		this.speed ++;
+		this.calculateAvance();
+		this.status = "a";
+	}
 
 	this.calculateAvance = function(){
 		switch(this.speed){
@@ -52,8 +58,8 @@ var car = function(){
 	}
 
 	this.frontCarAt = function(position){
-		var breakingTime = this.speed;
-		if(position < breakingTime){
+		var breakingTime = (this.speed/2);
+		if((position - this.position) < breakingTime){
 			this.slowDown();
 		}
 	};
