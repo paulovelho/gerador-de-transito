@@ -9,7 +9,7 @@
 <body ng-app="nrt-roads">
 	<div class="container">
 		<div class="row row-roader" ng-controller="roadController">
-			<div class="col-md-6 col-sm-6 datas">
+			<div class="col-md-6 col-sm-6 data">
 				<div class="row">
 					<div class="col-md-4">
 						Tempo: {{elapsedTime()}}<br/>
@@ -31,7 +31,7 @@
 				</div>
 			</div>
 			<div class="col-md-6 col-sm-6">
-				<table class="table-roads">
+				<table class="table-road bordered">
 					<tr ng-repeat="i in [] | range: size">
 						<td class="index">{{i}}.</td>
 						<td ng-repeat="lane in [] | range: lanes" class="road" ng-bind-html="roadShow(lane, i)"></td>

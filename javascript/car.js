@@ -14,6 +14,7 @@ var car = function(){
 
 	this.move = function(){
 		this.position = this.position + this.avance;
+		this.status = "c";
 		return this;
 	};
 	this.getI = function(){
@@ -58,7 +59,7 @@ var car = function(){
 	};
 
 	this.print = function(){
-		var prints = "<span class='car' style='top: "+this.getTopPostion()+"px'>";
+		var prints = "<span class='car "+this.status+"' style='top: "+this.getTopPostion()+"px'>";
 		switch(this.status){
 			case "c": prints += "= "; break;
 			case "b": prints += "< "; break;

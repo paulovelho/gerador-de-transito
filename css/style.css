@@ -14,15 +14,14 @@ table tr td {
 	width: 20px;
 	height: 20px;
 }
-table.table-road {
-	position: relative;
+table.table-road.bordered tr{
+	border-bottom: 1px dotted #999;
 }
 	table.table-road tr td {
 		border: 0px solid #CCC;
 		font-size: 10px;
 		width: 20px;
 		height: 20px;
-		position: relative;
 	}
 	table.table-road td.index {
 		text-align: right;
@@ -35,8 +34,8 @@ table.table-road {
 	}
 	table.table-road td.road {
 		background-color: #222;
-		text-align: center;
 		color: #FFF;
+		text-align: center;
 		width: 30px;
 		border-right: 2px dashed #CCA300;
 	}
@@ -45,7 +44,14 @@ table.table-road {
 	}
 span.car {
 	position: absolute;
+	color: #F00;
+	border: 1px solid red;
+	margin-left: -12px;
 }
+	span.car.c { color: #FFF; }
+	span.car.b { color: red; }
+	span.car.a { color: green; }
+	span.car.s { color: yellow; }
 
 .data .sign {
 	border-radius: 50%;
