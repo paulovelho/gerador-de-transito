@@ -1,0 +1,59 @@
+
+.center {
+	text-align: center;
+}
+
+
+.row-roader {
+	margin-top: 20px;
+}
+
+table tr td {
+	border: 1px solid #CCC;
+	font-size: 10px;
+	width: 20px;
+	height: 20px;
+}
+table.table-road {
+	position: relative;
+}
+	table.table-road tr td {
+		border: 0px solid #CCC;
+		font-size: 10px;
+		width: 20px;
+		height: 20px;
+		position: relative;
+	}
+	table.table-road td.index {
+		text-align: right;
+		padding-left: 10px;
+		padding-right: 5px; 
+	}
+	table.table-road td.border {
+		width: 5px;
+		background-color: #AAA;
+	}
+	table.table-road td.road {
+		background-color: #222;
+		text-align: center;
+		color: #FFF;
+		width: 30px;
+		border-right: 2px dashed #CCA300;
+	}
+	table.table-road td.index, table.table-road td.road:last-child {
+		border-right: 5px solid #AAA;
+	}
+span.car {
+	position: absolute;
+}
+
+.data .sign {
+	border-radius: 50%;
+	width: 75px;
+	height: 75px;
+	text-align: center;
+	padding-top: 5px;
+	border: 10px solid red;
+	font-weight: bold;
+	font-size: 30px;
+}

@@ -1,0 +1,53 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<title>Savedo Test</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link href="css/style.css" media="screen" rel="stylesheet" type="text/css" />
+</head>
+
+<body ng-app="nrt-roads">
+	<div class="container">
+		<div class="row row-roader" ng-controller="roadController">
+			<div class="col-md-6 col-sm-6 datas">
+				<div class="row">
+					<div class="col-md-4">
+						Tempo: {{elapsedTime()}}<br/>
+						Carros na pista: {{carsnow}}<br/>
+						Total de carros: {{carstotal}}<br/>
+					</div>
+					<div class="col-md-4">
+						Fluxo: {{flux}} %
+					</div>
+					<div class="col-md-4"> 
+						<div class="sign">{{max_speed}}</div>
+					</div>
+				</div>
+				<br/><br/>
+				<div class="row">
+					<div class="col-md-12 center">
+						<button class="btn btn-success" ng-click="playpause();">{{(playing ? "pause" : "play" )}}</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<table class="table-roads">
+					<tr ng-repeat="i in [] | range: size">
+						<td class="index">{{i}}.</td>
+						<td ng-repeat="lane in [] | range: lanes" class="road" ng-bind-html="roadShow(lane, i)"></td>
+					</tr>
+				</table>
+				</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/ng-template" id="road_table.html">
+
+</script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script type="text/javascript" src="javascript/app.js"></script>
+<script type="text/javascript" src="javascript/roader.js"></script>
+<script type="text/javascript" src="javascript/car.js"></script>
+</html>
