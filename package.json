@@ -1,0 +1,11 @@
+{
+	"name": "gerador-de-transito",
+	"version": "0.0.1",
+	"description": "Is it possible to reduce traffic from a road reducing its maximum speed?",
+	"author": "Paulo Velho - nRT",
+	"devDependencies": {
+		"chai": "~1.5.0",
+		"mocha": "~1.8.2",
+		"karma": "0.13.x"
+	}
+}

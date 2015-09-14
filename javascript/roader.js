@@ -3,10 +3,10 @@ angular
 .controller("roadController",
 function($scope, $interval, $sce){
 	// variables:
-	$scope.size = 50;
+	$scope.size = 30;
 	$scope.lanes = 3; // 2, 3, 4, 5
-	$scope.max_speed = 90; // 30, 60, 90
-	$scope.flux = 80;
+	$scope.max_speed = 60; // 30, 60, 90
+	$scope.flux = 20;
 
 	$scope.playing = false;
 	$scope.carstotal = 0;
@@ -97,7 +97,7 @@ function($scope, $interval, $sce){
 
 		// let's go each cell
 		$scope.carsnow = 0;
-		for(var l=0; l<$scope.lanes; l++){
+		for(var l=($scope.lanes-1); l>=0; l--){
 			var lastcar = $scope.size + breaking_distance;
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
@@ -105,10 +105,19 @@ function($scope, $interval, $sce){
 					if( car.speed < car.max_speed ){
 						// car will try to do something to speed up after moving
 						if( moveCar(car, l, i) ){
-							if(lastcar > breaking_distance){
+							if( (lastcar - car.position) > (car.speed + 1) ){
 								car.speedUp();
 							} else {
-
+								console.info("checking " + car.id + " on lane " + l);
+								car.hardBreak();
+								/*
+								if(l < $scope.lanes-1){
+									// check if lane to his left is free:
+									if( map[l++][i] == null && map[l++][i-1] == null ){
+										map[l][i] = null;
+									}
+								}
+								*/
 							}
 						}
 					} else {

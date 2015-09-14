@@ -38,6 +38,11 @@ var car = function(){
 		this.speed ++;
 		this.calculateAvance();
 		this.status = "a";
+	};
+	this.hardBreak = function(){
+		this.speed = 0;
+		this.calculateAvance();
+		this.status = "s"
 	}
 
 	this.calculateAvance = function(){
@@ -58,9 +63,13 @@ var car = function(){
 	}
 
 	this.frontCarAt = function(position){
-		var breakingTime = (this.speed/2);
-		if((position - this.position) < breakingTime){
-			this.slowDown();
+		var breakingTime = this.speed;
+		var distance = (position - this.position);
+		if(distance < breakingTime){
+			if(distance < breakingTime/2)
+				this.hardBreak();
+			else
+				this.slowDown();
 		}
 	};
 

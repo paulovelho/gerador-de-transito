@@ -3,7 +3,6 @@
 	text-align: center;
 }
 
-
 .row-roader {
 	margin-top: 20px;
 }
@@ -14,6 +13,12 @@ table tr td {
 	width: 20px;
 	height: 20px;
 }
+
+span.car {
+	position: absolute;
+}
+
+/*
 table.table-road.bordered tr{
 	border-bottom: 1px dotted #999;
 }
@@ -63,3 +68,5 @@ span.car {
 	font-weight: bold;
 	font-size: 30px;
 }
+
+/* */
