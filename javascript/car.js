@@ -96,6 +96,10 @@ var car = function(){
 		this.calculateAvance();
 		return this;
 	};
-}
+};
+
+car.prototype.toString = function(){
+	return "[car "+this.id+" ="+this.status+"|"+this.speed+"]";
+};
 
 

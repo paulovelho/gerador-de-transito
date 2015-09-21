@@ -51,8 +51,16 @@ function($scope, $interval, $sce){
 		return (Math.random() < odds);
 	};
 
+	$scope.build = function(data){
+		$scope.lanes = data.lanes;
+		$scope.flux = data.flux;
+		$scope.max_speed = data.max_speed;
+		$scope.size = data.size;
+		setup()
+	}
+
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
-	var chanceToBeSlower = function(l){
+	var chancesToBeSlower = function(l){
 //		return 20;
 		var lanes = $scope.lanes;
 		if(l > lanes) return 0;
@@ -70,7 +78,7 @@ function($scope, $interval, $sce){
 
 		var c = new car();
 		var new_speed = angular_speed;
-		var chance = chanceToBeSlower(l);
+		var chance = chancesToBeSlower(l);
 		if(TheOddsAre(chance)){
 			new_speed --;
 		}
@@ -163,6 +171,11 @@ function($scope, $interval, $sce){
 	};
 	initialize();
 
+	// test functions:
+	this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
+	this.goFunction = function(){ go(); }
+	this.feedMap = function(m){ map = m; }
+	this.getMap = function(){ return map; }
 })
 
 .filter('range', function() {
