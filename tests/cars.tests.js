@@ -28,6 +28,19 @@ describe("Cars", function(){
 			expect(c.speed).to.be.equal(0);
 			expect(c.status).to.be.equal("s");
 		});
+		it("o carro quebrou. liga pra porto", function(){
+			var c = new car();
+			c.start(1, 3, 0);
+			c.broken();
+			expect(c.position).to.be.equal(0);
+			expect(c.speed).to.be.equal(0);
+			expect(c.status).to.be.equal("x");
+			c.speedUp();
+			expect(c.speed).to.be.equal(0);
+			expect(c.status).to.be.equal("x");
+			c.move();
+			expect(c.position).to.be.equal(0);
+		});
 	});
 
 });

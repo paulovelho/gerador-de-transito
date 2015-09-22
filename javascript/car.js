@@ -7,7 +7,7 @@ var car = function(){
 	this.max_speed = 0;
 	this.speed = 0;
 	this.avance = 0;
-	this.status = "c"; // c = constant; b = breaking; a = acelerating; s = stopped
+	this.status = "c"; // c = constant; b = breaking; a = acelerating; s = stopped; x = broken
 
 	this.position = 0;
 	this.lane = 0;
@@ -32,6 +32,12 @@ var car = function(){
 		return this.speed * 30;
 	};
 
+	this.broken = function(){
+		this.speed = 0;
+		this.calculateAvance();
+		this.status = "x";
+	};
+
 	this.slowDown = function() {
 		if(this.status == "s") return;
 		this.speed --;
@@ -39,6 +45,7 @@ var car = function(){
 		if(this.speed == 0) this.status = "s"; else this.status = "b";
 	};
 	this.speedUp = function(){
+		if( this.status == "x" ) return;
 		if( this.speed == this.max_speed ) return;
 		this.speed ++;
 		this.calculateAvance();
