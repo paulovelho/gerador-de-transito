@@ -11,7 +11,6 @@ describe("Road", function(){
 
 	it("os testes tem que funcionar", function(){
 		expect(true).to.be.true;
-		console.info(roadController);
 	});
 
 	describe("HaddadLegalzao", function(){
@@ -36,7 +35,6 @@ describe("Road", function(){
 	});
 
 	describe("Transito", function(){
-
 		function createCar(id, speed, lane){
 			var c = new car();
 			c.start(id, speed, lane);
@@ -67,7 +65,7 @@ describe("Road", function(){
 		});
 
 		it("Olha ali o carro parado... ve se ele anda", function(){
-			var debug = true;
+			var debug = false;
 			scope.build({
 				lanes: 3, max_speed: 90, size: 5, flux: 0
 			});

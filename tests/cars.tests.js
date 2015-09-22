@@ -2,7 +2,6 @@ describe("Cars", function(){
 
 	it("os testes tem que funcionar", function(){
 		expect(true).to.be.true;
-		console.info(car);
 	});
 
 	describe("HaddadFdp", function(){

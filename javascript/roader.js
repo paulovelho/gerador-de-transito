@@ -86,7 +86,6 @@ function($scope, $interval, $sce){
 	};
 
 	var go = function(){
-		console.info("moving");
 		function moveCar(car, l, i){
 			car = car.move();
 			if(car.getI() > $scope.size){
@@ -114,7 +113,6 @@ function($scope, $interval, $sce){
 				if( moveCar(car, l, i) ){
 					if( (lastcar - car.position) > (car.speed + 1) ){
 						if(car.status == "c"){
-							console.info("speeding up. car status: " + car.status);
 							car.speedUp();
 						}
 					} else {
@@ -137,10 +135,10 @@ function($scope, $interval, $sce){
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
 				if(car){
-					console.info("car start: speed="+car.speed+", status="+car.status);
+//					console.info("car start: speed="+car.speed+", status="+car.status);
 					car = actionCar(car, l, i);
 					lastcar = car.position;
-					console.info("car end: speed="+car.speed+", status="+car.status);
+//					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
 			}
 			if(lastcar > breaking_distance){
