@@ -86,7 +86,7 @@ function($scope, $interval, $sce){
 	};
 
 	var go = function(){
-
+		console.info("moving");
 		function moveCar(car, l, i){
 			car = car.move();
 			if(car.getI() > $scope.size){
@@ -103,6 +103,33 @@ function($scope, $interval, $sce){
 			}
 		};
 
+		function actionCar(car, l, i){
+			if(car.speed == 0){
+				// car stopped. move it!
+				car.speedUp();
+				return car;
+			}
+			if( car.speed < car.max_speed ){
+				// car will try to do something to speed up after moving
+				if( moveCar(car, l, i) ){
+					if( (lastcar - car.position) > (car.speed + 1) ){
+						if(car.status == "c"){
+							console.info("speeding up. car status: " + car.status);
+							car.speedUp();
+						}
+					} else {
+						car.hardBreak();
+					}
+				}
+			} else {
+				// car at max speed. just move.
+				if( moveCar(car, l, i) ){
+					car.frontCarAt(lastcar);
+				}
+			}
+			return car;
+		};
+
 		// let's go each cell
 		$scope.carsnow = 0;
 		for(var l=($scope.lanes-1); l>=0; l--){
@@ -110,31 +137,10 @@ function($scope, $interval, $sce){
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
 				if(car){
-					if( car.speed < car.max_speed ){
-						// car will try to do something to speed up after moving
-						if( moveCar(car, l, i) ){
-							if( (lastcar - car.position) > (car.speed + 1) ){
-								car.speedUp();
-							} else {
-								console.info("checking " + car.id + " on lane " + l);
-								car.hardBreak();
-								/*
-								if(l < $scope.lanes-1){
-									// check if lane to his left is free:
-									if( map[l++][i] == null && map[l++][i-1] == null ){
-										map[l][i] = null;
-									}
-								}
-								*/
-							}
-						}
-					} else {
-						// car at max speed. just move.
-						if( moveCar(car, l, i) ){
-							car.frontCarAt(lastcar);
-						}
-					}
+					console.info("car start: speed="+car.speed+", status="+car.status);
+					car = actionCar(car, l, i);
 					lastcar = car.position;
+					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
 			}
 			if(lastcar > breaking_distance){

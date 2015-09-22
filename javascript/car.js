@@ -14,11 +14,16 @@ var car = function(){
 
 	this.move = function(){
 		this.position = this.position + this.avance;
-		this.status = "c";
+		if(this.status != "c")
+			// this is just for set an accelerating time
+			this.status = ( this.status == "n" ? "c" : "n" )
 		return this;
 	};
 	this.getI = function(){
 		return Math.floor(this.position);
+	};
+	this.setPosition = function(i){
+		this.position = i;
 	};
 	this.getTopPostion = function(){
 		return(this.position*this.blockHeight);
@@ -34,7 +39,7 @@ var car = function(){
 		if(this.speed == 0) this.status = "s"; else this.status = "b";
 	};
 	this.speedUp = function(){
-		if( this.speed = this.max_speed ) return;
+		if( this.speed == this.max_speed ) return;
 		this.speed ++;
 		this.calculateAvance();
 		this.status = "a";
