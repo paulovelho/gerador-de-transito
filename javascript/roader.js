@@ -5,7 +5,7 @@ function($scope, $interval, $sce){
 	// variables:
 	$scope.size = 30;
 	$scope.lanes = 3; // 2, 3, 4, 5
-	$scope.max_speed = 60; // 30, 60, 90
+	$scope.max_speed = 90; // 30, 60, 90
 	$scope.flux = 20;
 
 	$scope.playing = false;
@@ -103,20 +103,30 @@ function($scope, $interval, $sce){
 		};
 
 		function actionCar(car, l, i){
-			if(car.speed == 0){
-				// car stopped. move it!
-				car.speedUp();
+			// special effects:
+			if(car.id == 7 && i > 12) { // break car
+				car.broken();
 				return car;
+			}
+
+			var distance = lastcar - car.position;
+			console.info("distance: " + distance);
+			if(car.speed == 0){
+				if( distance > (car.speed + 1) ){
+					// car stopped. move it!
+					car.speedUp();
+					return car;
+				}
 			}
 			if( car.speed < car.max_speed ){
 				// car will try to do something to speed up after moving
 				if( moveCar(car, l, i) ){
-					if( (lastcar - car.position) > (car.speed + 1) ){
+					if( distance > (car.speed + 1) ){
 						if(car.status == "c"){
 							car.speedUp();
 						}
 					} else {
-						car.hardBreak();
+						car.slowDown();
 					}
 				}
 			} else {
@@ -135,10 +145,10 @@ function($scope, $interval, $sce){
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
 				if(car){
-//					console.info("car start: speed="+car.speed+", status="+car.status);
+					console.info("car start: speed="+car.speed+", status="+car.status);
 					car = actionCar(car, l, i);
 					lastcar = car.position;
-//					console.info("car end: speed="+car.speed+", status="+car.status);
+					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
 			}
 			if(lastcar > breaking_distance){

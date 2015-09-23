@@ -12,8 +12,21 @@ var car = function(){
 	this.position = 0;
 	this.lane = 0;
 
+	this.roundPosition = function(val){
+		var parte_inteira = Math.floor(val);
+		var parte_quebrada = val - parte_inteira;
+		if( parte_quebrada >= 0.95 ){
+			return (parte_inteira + 1);
+		}
+		if( parte_quebrada < 0.05 ){
+			return parte_inteira;
+		}
+		return parseFloat(val);
+	};
+
 	this.move = function(){
-		this.position = this.position + this.avance;
+		if(this.status == "s") return this;
+		this.position = this.roundPosition(this.position + this.avance);
 		if(this.status != "c")
 			// this is just for set an accelerating time
 			this.status = ( this.status == "n" ? "c" : "n" )
@@ -40,6 +53,7 @@ var car = function(){
 
 	this.slowDown = function() {
 		if(this.status == "s") return;
+		console.info("slowing down...");
 		this.speed --;
 		this.calculateAvance();
 		if(this.speed == 0) this.status = "s"; else this.status = "b";
@@ -47,11 +61,13 @@ var car = function(){
 	this.speedUp = function(){
 		if( this.status == "x" ) return;
 		if( this.speed == this.max_speed ) return;
+		console.info("speeding up...");
 		this.speed ++;
 		this.calculateAvance();
 		this.status = "a";
 	};
 	this.hardBreak = function(){
+		console.info("breaking...")
 		this.speed = 0;
 		this.calculateAvance();
 		this.status = "s"

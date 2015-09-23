@@ -1,10 +1,35 @@
 describe("Cars", function(){
 
+	return;
+
 	it("os testes tem que funcionar", function(){
 		expect(true).to.be.true;
 	});
 
 	describe("HaddadFdp", function(){
+
+		it("arredonda essa posicao ai senao fica foda fazer as contas, cara", function(){
+			// quando posicao > .95 arredonda o numero pra cima...
+			var c = new car();
+			expect(c.roundPosition("0.96")).to.be.equal(1);
+			expect(c.roundPosition("3.98")).to.be.equal(4);
+			expect(c.roundPosition("2.95")).to.be.equal(3);
+			expect(c.roundPosition("7.92")).to.be.equal(7.92);
+			expect(c.roundPosition("2.03")).to.be.equal(2);
+			expect(c.roundPosition("9.04")).to.be.equal(9);
+		});
+
+		it("posicao do carro arredonda tambem", function(){
+			var c = new car();
+			c.start(1, 1, 0);
+			c.move();
+			expect(c.position).to.be.equal(0.33);
+			c.move();
+			expect(c.position).to.be.equal(0.66);
+			c.move();
+			expect(c.position).to.be.equal(1);
+		});
+
 		it("car nao pode correr mais que sua propria velocidade maxima", function(){
 			var c = new car();
 			c.start(1, 2, 0);
