@@ -3,6 +3,7 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<title>nRT - Gerador de Trânsito</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link href="css/slider.css" media="screen" rel="stylesheet" type="text/css" />
 	<link href="css/style.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
 
@@ -10,6 +11,37 @@
 	<div class="container">
 		<div class="row row-roader" ng-controller="roadController">
 			<div class="col-md-6 col-sm-6 data">
+				<div class="row ng-controls-reseters" ng-hide="playing || reset">
+					<div class="col-md-12 center">
+						<button class="btn btn-danger" ng-click="reset()">Change settings</button>
+					</div>
+				</div>			
+				<div class="row ng-controls-reseters" ng-show="reset">
+					<div class="col-md-4">
+						Velocidade máxima:<br/>
+						<input type="radio" name="set_max_speed" ng-model="max_speed" value="30" class="haddad-pen" /> 30km/h<br/>
+						<input type="radio" name="set_max_speed" ng-model="max_speed" value="60" class="haddad-pen" /> 60km/h<br/>
+						<input type="radio" name="set_max_speed" ng-model="max_speed" value="90" class="haddad-pen" /> 90km/h<br/>
+					</div>
+					<div class="col-md-4">
+						Faixas:<br/>
+						<input type="radio" name="set_lanes" ng-model="lanes" value="3" class="haddad-pen" /> 3<br/>
+						<input type="radio" name="set_lanes" ng-model="lanes" value="4" class="haddad-pen" /> 4<br/>
+						<input type="radio" name="set_lanes" ng-model="lanes" value="5" class="haddad-pen" /> 5<br/>
+					</div>
+					<div class="col-md-4">
+						Extensão da via:<br/>
+						<input type="radio" name="set_size" ng-model="size" value="40" class="haddad-pen" /> 1 km<br/>
+						<input type="radio" name="set_size" ng-model="size" value="60" class="haddad-pen" /> 1,5 km<br/>
+						<input type="radio" name="set_size" ng-model="size" value="80" class="haddad-pen" /> 2 km<br/>
+						<input type="radio" name="set_size" ng-model="size" value="120" class="haddad-pen" /> 3 km<br/>
+					</div>
+				</div>
+				<div class="row ng-controls">
+					<div class="col-md-12">
+						<slider floor="20" ceiling="100" ng-model="flux"></slider>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-md-4">
 						Tempo: {{elapsedTime()}}<br/>
@@ -47,6 +79,7 @@
 </script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script type="text/javascript" src="javascript/libs/slider.js"></script>
 <script type="text/javascript" src="javascript/app.js"></script>
 <script type="text/javascript" src="javascript/roader.js"></script>
 <script type="text/javascript" src="javascript/car.js"></script>

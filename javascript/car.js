@@ -53,7 +53,7 @@ var car = function(){
 
 	this.slowDown = function() {
 		if(this.status == "s") return;
-		console.info("slowing down...");
+//		console.info("slowing down...");
 		this.speed --;
 		this.calculateAvance();
 		if(this.speed == 0) this.status = "s"; else this.status = "b";
@@ -61,13 +61,13 @@ var car = function(){
 	this.speedUp = function(){
 		if( this.status == "x" ) return;
 		if( this.speed == this.max_speed ) return;
-		console.info("speeding up...");
+//		console.info("speeding up...");
 		this.speed ++;
 		this.calculateAvance();
 		this.status = "a";
 	};
 	this.hardBreak = function(){
-		console.info("breaking...")
+//		console.info("breaking...")
 		this.speed = 0;
 		this.calculateAvance();
 		this.status = "s"

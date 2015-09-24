@@ -9,13 +9,25 @@ describe("Road", function(){
 		roadController = $controller("roadController", { $scope: scope });
 	}));
 
-	it("os testes tem que funcionar", function(){
+	it("os testes tem que funfar", function(){
 		expect(true).to.be.true;
 	});
 
 	describe("HaddadLegalzao", function(){
 		it("a marginal existe", function(){
 			expect(scope.lanes).to.be.within(1, 5);
+		});
+
+		it("if I could save time in a bottle...", function(){
+			var show_time;
+			show_time = roadController.testTimeDisplay("60", 1000);
+			expect(show_time).to.be.equal("1:00");
+			show_time = roadController.testTimeDisplay("60", 500);
+			expect(show_time).to.be.equal(":30");
+			show_time = roadController.testTimeDisplay("600", 500);
+			expect(show_time).to.be.equal("5:00");
+			show_time = roadController.testTimeDisplay("600", 250);
+			expect(show_time).to.be.equal("2:30");
 		});
 
 		it("chance to be slower deve ser dez se so ha uma lane", function(){
@@ -31,7 +43,6 @@ describe("Road", function(){
 			expect( roadController.chancesToBeSlowerFunction(0) ).to.be.equal(20);
 			expect( roadController.chancesToBeSlowerFunction(2) ).to.be.equal(0);
 		});
-
 	});
 
 	describe("Transito", function(){
@@ -41,8 +52,159 @@ describe("Road", function(){
 			return c;
 		};
 
-		it("Se um carro quebra, o carro de tras para", function(){
+		it("Quinta de manha - carro quebrado e o escambau", function(){
 			var debug = true;
+			scope.build({
+				lanes: 3, max_speed: 90, size: 15, flux: 0
+			});
+			var map = [Array(15), Array(15), Array(15)];
+			var nothing, car1, car2, car3, carbroken;
+
+			car1 = createCar(1, 3, 0);
+			car1.position = 6;
+			car1.hardBreak();
+			map[0][6] = car1;
+			car2 = createCar(2, 3, 1);
+			car2.position = 5;
+			map[1][5] = car2;
+			car3 = createCar(3, 3, 1);
+			car3.position = 0;
+			map[1][0] = car3;
+			carbroken = createCar(4, 3, 1);
+			carbroken.broken();
+			carbroken.position = 7;
+			map[0][7] = carbroken;
+
+			roadController.feedMap(map);
+
+
+			if(debug) console.info("t=0");
+			car1 = roadController.getMap()[0][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+			car2 = roadController.getMap()[1][5];
+			expect(car2).to.be.an("object");
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(5);
+
+			/*
+			if(debug) console.info("t=1");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(1);
+			expect(car.position).to.be.equal(0);
+
+			if(debug) console.info("t=2");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(1);
+			expect(car.position).to.be.equal(0.33);
+			*/
+
+		});
+
+
+		it("Sabado a tarde - transito ta de boa", function(){
+			scope.build({
+				lanes: 3, max_speed: 90, size: 5, flux: 50
+			});
+			var map = [Array(5), Array(5), Array(5)];
+			var c1 = createCar(1, 3, 0);
+			var c2 = createCar(2, 3, 1);
+			var c3 = createCar(3, 3, 2);
+			map[0][0] = c1;
+			map[1][0] = c2;
+			map[2][0] = c3;
+			roadController.feedMap(map);
+			roadController.goFunction();
+			roadController.goFunction();
+			var resultMap = roadController.getMap();
+			expect(resultMap[0][0]).to.be.equal(null);
+			expect(resultMap[1][0]).to.be.equal(null);
+			expect(resultMap[2][0]).to.be.equal(null);
+			var car = resultMap[1][2];
+			expect(car).to.be.an("Object");
+			expect(car.speed).to.be.equal(3);
+		});
+
+		it("Olha ali o carro parado... ve se ele anda", function(){
+			var debug = false;
+			scope.build({
+				lanes: 3, max_speed: 90, size: 5, flux: 0
+			});
+			var map = [Array(5), Array(5), Array(5)];
+			var c1 = createCar(1, 3, 1);
+			c1.hardBreak();
+			var nothing, car;
+			map[1][0] = c1;
+			roadController.feedMap(map);
+
+			if(debug) console.info("t=0");
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(0);
+			expect(car.position).to.be.equal(0);
+
+			if(debug) console.info("t=1");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(1);
+			expect(car.position).to.be.equal(0);
+
+			if(debug) console.info("t=2");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(1);
+			expect(car.position).to.be.equal(0.33);
+
+			if(debug) console.info("t=3");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(2);
+			expect(car.position).to.be.equal(0.66);
+
+			if(debug) console.info("t=4");
+			roadController.goFunction();
+			nothing = roadController.getMap()[1][0];
+			expect(nothing).to.be.null;
+			car = roadController.getMap()[1][1];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(2);
+
+			if(debug) console.info("t=5");
+			roadController.goFunction();
+			nothing = roadController.getMap()[1][1];
+			expect(nothing).to.be.null;
+			car = roadController.getMap()[1][2];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(3);
+
+			if(debug) console.info("t=6");
+			roadController.goFunction();
+			nothing = roadController.getMap()[1][2];
+			expect(nothing).to.be.null;
+			car = roadController.getMap()[1][3];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(3);
+
+			if(debug) console.info("t=7");
+			roadController.goFunction();
+			nothing = roadController.getMap()[1][3];
+			expect(nothing).to.be.null;
+			car = roadController.getMap()[1][4];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(3);
+
+		});
+
+		it("Se um carro quebra, o carro de tras para", function(){
+			var debug = false;
 			scope.build({
 				lanes: 3, max_speed: 90, size: 5, flux: 0
 			});
@@ -112,104 +274,6 @@ describe("Road", function(){
 			car2 = roadController.getMap()[1][4];
 			expect(car2.speed).to.be.equal(0);
 			expect(car2.position).to.be.equal(4);
-		});
-
-		it("Sabado a tarde - transito ta de boa", function(){
-			return;
-			scope.build({
-				lanes: 3, max_speed: 90, size: 5, flux: 50
-			});
-			var map = [Array(5), Array(5), Array(5)];
-			var c1 = createCar(1, 3, 0);
-			var c2 = createCar(2, 3, 1);
-			var c3 = createCar(3, 3, 2);
-			map[0][0] = c1;
-			map[1][0] = c2;
-			map[2][0] = c3;
-			roadController.feedMap(map);
-			roadController.goFunction();
-			roadController.goFunction();
-			var resultMap = roadController.getMap();
-			expect(resultMap[0][0]).to.be.equal(null);
-			expect(resultMap[1][0]).to.be.equal(null);
-			expect(resultMap[2][0]).to.be.equal(null);
-			var car = resultMap[1][2];
-			expect(car).to.be.an("Object");
-			expect(car.speed).to.be.equal(3);
-		});
-
-		it("Olha ali o carro parado... ve se ele anda", function(){
-			return;
-			var debug = false;
-			scope.build({
-				lanes: 3, max_speed: 90, size: 5, flux: 0
-			});
-			var map = [Array(5), Array(5), Array(5)];
-			var c1 = createCar(1, 3, 1);
-			c1.hardBreak();
-			var nothing, car;
-			map[1][0] = c1;
-			roadController.feedMap(map);
-
-			if(debug) console.info("t=0");
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(0);
-			expect(car.position).to.be.equal(0);
-
-			if(debug) console.info("t=1");
-			roadController.goFunction();
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(1);
-			expect(car.position).to.be.equal(0);
-
-			if(debug) console.info("t=2");
-			roadController.goFunction();
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(1);
-			expect(car.position).to.be.equal(0.33);
-
-			if(debug) console.info("t=3");
-			roadController.goFunction();
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(2);
-			expect(car.position).to.be.equal(0.66);
-
-			if(debug) console.info("t=4");
-			roadController.goFunction();
-			nothing = roadController.getMap()[1][0];
-			expect(nothing).to.be.null;
-			car = roadController.getMap()[1][1];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(2);
-
-			if(debug) console.info("t=5");
-			roadController.goFunction();
-			nothing = roadController.getMap()[1][0];
-			expect(nothing).to.be.null;
-			car = roadController.getMap()[1][1];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(3);
-
-			if(debug) console.info("t=6");
-			roadController.goFunction();
-			nothing = roadController.getMap()[1][1];
-			expect(nothing).to.be.null;
-			car = roadController.getMap()[1][2];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(3);
-
-			if(debug) console.info("t=7");
-			roadController.goFunction();
-			nothing = roadController.getMap()[1][2];
-			expect(nothing).to.be.null;
-			car = roadController.getMap()[1][3];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(3);
-
 		});
 
 	});

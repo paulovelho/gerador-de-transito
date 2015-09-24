@@ -1,1 +1,1 @@
-angular.module("nrt-roads", []);
+angular.module("nrt-roads", ["uiSlider"]);

@@ -2,46 +2,53 @@ angular
 .module("nrt-roads")
 .controller("roadController",
 function($scope, $interval, $sce){
+	
 	// variables:
-	$scope.size = 30;
-	$scope.lanes = 3; // 2, 3, 4, 5
-	$scope.max_speed = 90; // 30, 60, 90
-	$scope.flux = 20;
+	$scope.size = 30; // cada size unit = 20px. cada pixel = 1.25m. faz as contas, cara.
+	$scope.lanes = 3; // 3, 4, 5. nada menor do que 3. somos uma cidade moderna.
+	$scope.max_speed = 90; // 30, 60, 90. Nada menor que 30 (Não somos um bando de primitivos). Nada maior que 90 (não estamos na Alemanha).
+	$scope.flux = 80; // flux vai ser o nome da minha marca de sabonetes
 
-	$scope.playing = false;
-	$scope.carstotal = 0;
-	$scope.carsnow = 0;
-	$scope.time = 0;
+	$scope.reset = null; // not proud. I'm not a good developer.
+	$scope.playing = false; // dá o play, macaco
+	$scope.carstotal = 0; // quantos carros passaram aqui?
+	$scope.carsnow = 0; // quantos carros tem na rua agora?
+	$scope.time = 0; // que horas são?
 
-	// ok... private over here
-	var angular_speed = $scope.max_speed / 30;
-	var cars_id = 0;
+	// ok... private variables over here... keep moving... keep moving...
+	var angular_speed = $scope.max_speed / 30; // angular speed. my personal bit of magic.
+	var cars_id = 0; // id do carro. que eu uso pra nada. pra nada.
 	var breaking_distance = 5; // speed cars starts to slow down
-	var updateTime = 300;
+	var updateTime = 300; // frequencia de updates (in ms)
 
-	var map = [];
-	var cet = null;
-
+	var map = []; // mapa da via
+	var cet = null; // agente que toma conta do transito (Javascripticamente falando: define e cancela o time interval)
 
 	$scope.roadShow = function(lane, i){
 		var car = map[lane][i];
 		if( !car ) return;
 		return $sce.trustAsHtml(car.print());
 	};
+
+	$scope.reset = function(){
+		resetRoad();
+	}
+
 	$scope.playpause = function(){
 		if($scope.playing)
 			$interval.cancel(cet);
 		else
 			cet = $interval(go, updateTime);
 		$scope.playing = !$scope.playing;
+		$scope.reset = false;
 	};
 
 	$scope.elapsedTime = function(){
-		var time = Math.floor($scope.time/3);
+		var time = Math.floor($scope.time * updateTime/1000);
 //		var time = $scope.time;
 		var minutes = Math.floor(time/60);
-		var seconds = time - minutes;
-		if(minutes < 10) minutes = "0" + minutes;
+		var seconds = time - (minutes * 60);
+		if(minutes == 0) minutes = "";
 		if(seconds < 10) seconds = "0" + seconds;
 		return minutes + ":" + seconds;
 	};
@@ -61,7 +68,7 @@ function($scope, $interval, $sce){
 
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
 	var chancesToBeSlower = function(l){
-//		return 20;
+//		return 20; // when I want to pretend I control Universe, I just return 20.
 		var lanes = $scope.lanes;
 		if(l > lanes) return 0;
 		var chanceToBeSlower = 10; // default = 10% of chance of a slower vehicle;
@@ -110,7 +117,7 @@ function($scope, $interval, $sce){
 			}
 
 			var distance = lastcar - car.position;
-			console.info("distance: " + distance);
+//			console.info("distance: " + distance);
 			if(car.speed == 0){
 				if( distance > (car.speed + 1) ){
 					// car stopped. move it!
@@ -145,10 +152,10 @@ function($scope, $interval, $sce){
 			for(var i=$scope.size; i>=0; i--){
 				var car = map[l][i];
 				if(car){
-					console.info("car start: speed="+car.speed+", status="+car.status);
+//					console.info("car start: speed="+car.speed+", status="+car.status);
 					car = actionCar(car, l, i);
 					lastcar = car.position;
-					console.info("car end: speed="+car.speed+", status="+car.status);
+//					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
 			}
 			if(lastcar > breaking_distance){
@@ -177,6 +184,7 @@ function($scope, $interval, $sce){
 		$scope.carstotal = 0;
 		$scope.carsnow = 0;
 		$scope.time = 0;
+		$scope.reset = true;
 	};
 
 	var initialize = function(){
@@ -187,6 +195,11 @@ function($scope, $interval, $sce){
 
 	// test functions:
 	this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
+	this.testTimeDisplay = function(time, timeInterval){ 
+		$scope.time = time;
+		updateTime = timeInterval;
+		return $scope.elapsedTime(); 
+	}
 	this.goFunction = function(){ go(); }
 	this.feedMap = function(m){ map = m; }
 	this.getMap = function(){ return map; }
