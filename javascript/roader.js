@@ -17,6 +17,7 @@ function($scope, $interval, $sce){
 
 	// ok... private variables over here... keep moving... keep moving...
 	var angular_speed = $scope.max_speed / 30; // angular speed. my personal bit of magic.
+	var changingLanes = true;
 	var cars_id = 0; // id do carro. que eu uso pra nada. pra nada.
 	var breaking_distance = 5; // speed cars starts to slow down
 	var updateTime = 300; // frequencia de updates (in ms)
@@ -109,21 +110,33 @@ function($scope, $interval, $sce){
 			}
 		};
 
-		function actionCar(car, l, i){
-			// special effects:
-			if(car.id == 7 && i > 12) { // break car
-				car.broken();
-				return car;
+		function canIMoveLeft(l, i){
+			if(!changingLanes) return false;
+			if(l == $scope.lanes-1) return false;
+			var left = (l+1);
+			for(var j=(i-2); j<=(i+1); j++){ // 2 spaces before, one space after
+				if( map[left][j] != null){
+					return false;	
+				} 
 			}
+			return true;
+		}
 
+		function actionCar(car, l, i){
 			var distance = lastcar - car.position;
-//			console.info("distance: " + distance);
 			if(car.speed == 0){
 				if( distance > (car.speed + 1) ){
 					// car stopped. move it!
 					car.speedUp();
-					return car;
+				} else {
+					// no way to move. Let's try to move the car to left:
+					if(canIMoveLeft(l, i)){
+						car.changeLane();
+						map[l][i] = null;
+						map[car.lane][i] = car;
+					}
 				}
+				return car;
 			}
 			if( car.speed < car.max_speed ){
 				// car will try to do something to speed up after moving
@@ -153,7 +166,8 @@ function($scope, $interval, $sce){
 				var car = map[l][i];
 				if(car){
 //					console.info("car start: speed="+car.speed+", status="+car.status);
-					car = actionCar(car, l, i);
+					if(car.status != "x")
+						actionCar(car, l, i);
 					lastcar = car.position;
 //					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
@@ -195,6 +209,7 @@ function($scope, $interval, $sce){
 
 	// test functions:
 	this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
+	this.changingLanes = function(canI){ changingLanes = canI; }
 	this.testTimeDisplay = function(time, timeInterval){ 
 		$scope.time = time;
 		updateTime = timeInterval;

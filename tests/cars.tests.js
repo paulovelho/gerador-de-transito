@@ -1,13 +1,10 @@
 describe("Cars", function(){
-
 	return;
-
 	it("os testes tem que funcionar", function(){
 		expect(true).to.be.true;
 	});
 
 	describe("HaddadFdp", function(){
-		return;
 		it("arredonda essa posicao ai senao fica foda fazer as contas, cara", function(){
 			// quando posicao > .95 arredonda o numero pra cima...
 			var c = new car();
@@ -29,6 +26,19 @@ describe("Cars", function(){
 			c.move();
 			expect(c.position).to.be.equal(1);
 		});
+
+		it("changing lanes", function(){
+			var c = new car();
+			c.start(1, 3, 1);
+			// car can't change lane if too fast
+			c.changeLane();
+			expect(c.lane).to.be.equal(1);
+			c.slowDown();
+			c.slowDown();
+			c.changeLane();
+			expect(c.lane).to.be.equal(2);
+			expect(c.speed).to.be.equal(0);
+		})
 
 		it("car nao pode correr mais que sua propria velocidade maxima", function(){
 			var c = new car();

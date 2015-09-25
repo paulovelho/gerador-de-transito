@@ -77,8 +77,8 @@ describe("Road", function(){
 
 			roadController.feedMap(map);
 
-
 			if(debug) console.info("t=0");
+			car1 = car2 = car3 = carbroken = null;
 			car1 = roadController.getMap()[0][6];
 			expect(car1).to.be.an("object");
 			expect(car1.speed).to.be.equal(0);
@@ -87,22 +87,75 @@ describe("Road", function(){
 			expect(car2).to.be.an("object");
 			expect(car2.speed).to.be.equal(3);
 			expect(car2.position).to.be.equal(5);
+			car3 = roadController.getMap()[1][0];
+			expect(car3).to.be.an("object");
+			expect(car3.speed).to.be.equal(3);
+			expect(car3.position).to.be.equal(0);
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken).to.be.an("object");
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
 
-			/*
 			if(debug) console.info("t=1");
+			car1 = car2 = car3 = carbroken = null;
 			roadController.goFunction();
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(1);
-			expect(car.position).to.be.equal(0);
 
 			if(debug) console.info("t=2");
+			car1 = car2 = car3 = carbroken = null;
 			roadController.goFunction();
-			car = roadController.getMap()[1][0];
-			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(1);
-			expect(car.position).to.be.equal(0.33);
-			*/
+			nothing = roadController.getMap()[1][6];
+			expect(nothing).to.be.null;
+			car3 = roadController.getMap()[1][2];
+			expect(car3.speed).to.be.equal(3);
+			expect(car3.position).to.be.equal(2);
+			car1 = roadController.getMap()[0][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+
+			if(debug) console.info("t=3");
+			car1 = car2 = car3 = carbroken = null;
+			roadController.goFunction();
+			nothing = roadController.getMap()[0][6];
+			expect(nothing).to.be.null;
+			car1 = roadController.getMap()[1][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+
+			if(debug) console.info("t=4");
+			car1 = car2 = car3 = carbroken = null;
+			roadController.goFunction();
+			car1 = roadController.getMap()[1][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(1);
+			expect(car1.position).to.be.equal(6);
+			car3 = roadController.getMap()[1][4];
+			expect(car3).to.be.an("object");
+			expect(car3.speed).to.be.equal(2);
+			expect(car3.position).to.be.equal(4);
+
+			if(debug) console.info("t=5");
+			car1 = car2 = car3 = carbroken = null;
+			roadController.goFunction();
+			car3 = roadController.getMap()[1][4];
+			expect(car3).to.be.an("object");
+			expect(car3.speed).to.be.equal(1);
+			expect(car3.getI()).to.be.equal(4);
+
+			if(debug) console.info("t=6");
+			car1 = car2 = car3 = carbroken = null;
+			roadController.goFunction();
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken).to.be.an("object");
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
+			car3 = roadController.getMap()[1][5];
+			expect(car3).to.be.an("object");
+			expect(car3.speed).to.be.equal(0);
+			expect(car3.getI()).to.be.equal(5);
 
 		});
 
@@ -218,6 +271,7 @@ describe("Road", function(){
 			var movingone = createCar(2, 3, 1);
 			map[1][0] = movingone;
 			roadController.feedMap(map);
+			roadController.changingLanes(false);
 
 			var car1, car2;
 
@@ -274,6 +328,115 @@ describe("Road", function(){
 			car2 = roadController.getMap()[1][4];
 			expect(car2.speed).to.be.equal(0);
 			expect(car2.position).to.be.equal(4);
+		});
+
+		it("Motorista prudente nao troca de faixa sem dar seta", function(){
+			var debug = false;
+			scope.build({
+				lanes: 3, max_speed: 90, size: 15, flux: 0
+			});
+			var map = [Array(15), Array(15), Array(15)];
+			var nothing, car1, car2, carbroken;
+
+			car1 = createCar(1, 3, 0);
+			car1.position = 6;
+			car1.hardBreak();
+			map[0][6] = car1;
+			car2 = createCar(2, 3, 1);
+			car2.position = 4;
+			map[1][4] = car2;
+			carbroken = createCar(4, 3, 1);
+			carbroken.broken();
+			carbroken.position = 7;
+			map[0][7] = carbroken;
+
+			roadController.feedMap(map);
+
+			if(debug) console.info("t=0");
+			car1 = car2 = carbroken = null;
+			car1 = roadController.getMap()[0][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+			car2 = roadController.getMap()[1][4];
+			expect(car2).to.be.an("object");
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(4);
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken).to.be.an("object");
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
+
+			if(debug) console.info("t=1");
+			car1 = car2 = carbroken = null;
+			roadController.goFunction();
+			car1 = roadController.getMap()[0][6];
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+			car2 = roadController.getMap()[1][5];
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(5);
+
+			if(debug) console.info("t=2");
+			car1 = car2 = carbroken = null;
+			roadController.goFunction();
+			car1 = roadController.getMap()[0][6];
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+			nothing = roadController.getMap()[1][5];
+			expect(nothing).to.be.null;
+			car2 = roadController.getMap()[1][6];
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(6);
+
+			if(debug) console.info("t=3");
+			car1 = car2 = carbroken = null;
+			roadController.goFunction();
+			car1 = roadController.getMap()[0][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+			expect(car1.position).to.be.equal(6);
+			car2 = roadController.getMap()[1][7];
+			expect(car2).to.be.an("object");
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(7);
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken).to.be.an("object");
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
+
+			if(debug) console.info("t=4 , ou a troca de faixa");
+			car1 = car2 = carbroken = null;
+			roadController.goFunction();
+			car2 = roadController.getMap()[1][8];
+			expect(car2).to.be.an("object");
+			expect(car2.speed).to.be.equal(3);
+			expect(car2.position).to.be.equal(8);
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
+			nothing = roadController.getMap()[0][6];
+			expect(nothing).to.be.null;
+			car1 = roadController.getMap()[1][6];
+			expect(car1).to.be.an("object");
+			expect(car1.speed).to.be.equal(0);
+
+			if(debug) console.info("t=5 , ou a vida continua");
+			car1 = car2 = carbroken = null;
+			roadController.goFunction();
+			carbroken = roadController.getMap()[0][7];
+			expect(carbroken.speed).to.be.equal(0);
+			expect(carbroken.status).to.be.equal("x");
+			expect(carbroken.position).to.be.equal(7);
+			nothing = roadController.getMap()[0][6];
+			expect(nothing).to.be.null;
+			car1 = roadController.getMap()[1][6];
+			expect(car1).to.be.an("object");
+			expect(car1.status).to.be.equal("a");
+			expect(car1.speed).to.be.equal(1);
 		});
 
 	});

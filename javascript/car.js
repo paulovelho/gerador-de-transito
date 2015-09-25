@@ -72,6 +72,12 @@ var car = function(){
 		this.calculateAvance();
 		this.status = "s"
 	}
+	this.changeLane = function(){
+		if( this.status == "x" ) return;
+		if( this.speed > 1 ) return;
+		this.lane++;
+		this.hardBreak();
+	}
 
 	this.calculateAvance = function(){
 		switch(this.speed){
