@@ -31,9 +31,9 @@ function($scope, $interval, $sce){
 		return $sce.trustAsHtml(car.print());
 	};
 
-	$scope.reset = function(){
+	$scope.resetAll = function(){
 		resetRoad();
-	}
+	};
 
 	$scope.playpause = function(){
 		if($scope.playing)
