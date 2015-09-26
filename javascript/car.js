@@ -100,7 +100,7 @@ var car = function(){
 		var breakingTime = this.speed;
 		var distance = (position - this.position);
 		if(distance < breakingTime){
-			if(distance < breakingTime/2)
+			if(distance < breakingTime-1)
 				this.hardBreak();
 			else
 				this.slowDown();

@@ -31,10 +31,6 @@ function($scope, $interval, $sce){
 		return $sce.trustAsHtml(car.print());
 	};
 
-	$scope.resetAll = function(){
-		resetRoad();
-	};
-
 	$scope.playpause = function(){
 		if($scope.playing)
 			$interval.cancel(cet);
@@ -54,18 +50,18 @@ function($scope, $interval, $sce){
 		return minutes + ":" + seconds;
 	};
 
-	var TheOddsAre = function(odds){
-		odds = odds/100;
-		return (Math.random() < odds);
-	};
-
 	$scope.build = function(data){
 		$scope.lanes = data.lanes;
 		$scope.flux = data.flux;
 		$scope.max_speed = data.max_speed;
 		$scope.size = data.size;
-		setup()
-	}
+		$scope.setup()
+	};
+
+	var TheOddsAre = function(odds){
+		odds = odds/100;
+		return (Math.random() < odds);
+	};
 
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
 	var chancesToBeSlower = function(l){
@@ -182,12 +178,13 @@ function($scope, $interval, $sce){
 		$scope.time ++;
 	};
 
-	var setup = function(){
+	$scope.setup = function(){
 		angular_speed = $scope.max_speed / 30;
 		breaking_distance = angular_speed;
 	};
 
-	var resetRoad = function(){
+	$scope.resetRoad = function(){
+		map = [];
 		for(var i=0;i<$scope.lanes;i++){
 			var lane = [];
 			for(var j=0;j<$scope.size;j++){
@@ -202,10 +199,16 @@ function($scope, $interval, $sce){
 	};
 
 	var initialize = function(){
-		setup();
-		resetRoad();
+		$scope.setup();
+		$scope.resetRoad();
 	};
 	initialize();
+
+// 	for testing with karma, we need to comment these watchers. 
+//		TODO: FIX THIS BS.
+//	$scope.$watch("[lanes, size]", $scope.resetRoad, true);
+//	$scope.$watch("max_speed", $scope.setup, true);
+
 
 	// test functions:
 	this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
