@@ -1,11 +1,12 @@
 describe("Road", function(){
 
-	var scope = {};
+	var scope = { };
 	var roadController;
 
 	beforeEach(module("nrt-roads"));
 	beforeEach(inject(function(_$controller_){
 		$controller = _$controller_;
+		scope.isTest = true;
 		roadController = $controller("roadController", { $scope: scope });
 	}));
 

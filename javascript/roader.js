@@ -206,21 +206,22 @@ function($scope, $interval, $sce){
 
 // 	for testing with karma, we need to comment these watchers. 
 //		TODO: FIX THIS BS.
-//	$scope.$watch("[lanes, size]", $scope.resetRoad, true);
-//	$scope.$watch("max_speed", $scope.setup, true);
-
-
-	// test functions:
-	this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
-	this.changingLanes = function(canI){ changingLanes = canI; }
-	this.testTimeDisplay = function(time, timeInterval){ 
-		$scope.time = time;
-		updateTime = timeInterval;
-		return $scope.elapsedTime(); 
+	if(!$scope.isTest){
+		$scope.$watch("[lanes, size]", $scope.resetRoad, true);
+		$scope.$watch("max_speed", $scope.setup, true);
+	} else {
+		// test functions:
+		this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
+		this.changingLanes = function(canI){ changingLanes = canI; }
+		this.testTimeDisplay = function(time, timeInterval){ 
+			$scope.time = time;
+			updateTime = timeInterval;
+			return $scope.elapsedTime(); 
+		}
+		this.goFunction = function(){ go(); }
+		this.feedMap = function(m){ map = m; }
+		this.getMap = function(){ return map; }
 	}
-	this.goFunction = function(){ go(); }
-	this.feedMap = function(m){ map = m; }
-	this.getMap = function(){ return map; }
 })
 
 .filter('range', function() {
