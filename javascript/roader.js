@@ -120,6 +120,7 @@ function($scope, $interval, $sce){
 
 		function actionCar(car, l, i){
 			var distance = lastcar - car.position;
+//			console.info("distance: " + distance);
 			if(car.speed == 0){
 				if( distance > (car.speed + 1) ){
 					// car stopped. move it!
