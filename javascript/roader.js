@@ -138,6 +138,7 @@ function($scope, $interval, $sce){
 
 		function actionCar(car, l, i){
 			var distance = lastcar - car.position;
+//			console.info("distance: " + distance);
 			if(car.speed == 0){
 				if( distance > (car.speed + 1) ){
 					// car stopped. move it!
@@ -148,6 +149,8 @@ function($scope, $interval, $sce){
 						car.changeLane();
 						map[l][i] = null;
 						map[car.lane][i] = car;
+					} else {
+						car.hardBreak();
 					}
 				}
 				return car;
