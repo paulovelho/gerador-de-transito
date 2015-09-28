@@ -1,6 +1,5 @@
 describe("Cars", function(){
 
-	return;
 	it("os testes tem que funcionar", function(){
 		expect(true).to.be.true;
 	});
@@ -62,8 +61,18 @@ describe("Cars", function(){
 			c.start(1, 3, 0);
 			c.hardBreak();
 			expect(c.speed).to.be.equal(0);
-			expect(c.status).to.be.equal("s");
+			expect(c.status).to.be.equal("b");
 		});
+
+		it("car nao pode acelerar se estiver freando", function(){
+			var c = new car();
+			c.start(1, 2, 0);
+			c.slowDown();
+			expect(c.speed).to.be.equal(1);
+			expect(c.status).to.be.equal("b");
+			c.speedUp();
+		});
+
 		it("o carro quebrou. liga pra porto", function(){
 			var c = new car();
 			c.start(1, 3, 0);

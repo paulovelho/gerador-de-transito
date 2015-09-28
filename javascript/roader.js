@@ -131,6 +131,8 @@ function($scope, $interval, $sce){
 						car.changeLane();
 						map[l][i] = null;
 						map[car.lane][i] = car;
+					} else {
+						car.hardBreak();
 					}
 				}
 				return car;

@@ -171,10 +171,11 @@ describe("Road", function(){
 			expect(car.position).to.be.equal(0);
 
 			if(debug) console.info("t=1");
+			// o carro acabou de frear, entao tem este momento, do motorista sem reacao:
 			roadController.goFunction();
 			car = roadController.getMap()[1][0];
 			expect(car).to.be.an("object");
-			expect(car.speed).to.be.equal(1);
+			expect(car.speed).to.be.equal(0);
 			expect(car.position).to.be.equal(0);
 
 			if(debug) console.info("t=2");
@@ -182,16 +183,23 @@ describe("Road", function(){
 			car = roadController.getMap()[1][0];
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(1);
-			expect(car.position).to.be.equal(0.33);
+			expect(car.position).to.be.equal(0);
 
 			if(debug) console.info("t=3");
+			roadController.goFunction();
+			car = roadController.getMap()[1][0];
+			expect(car).to.be.an("object");
+			expect(car.speed).to.be.equal(1);
+			expect(car.position).to.be.equal(0.33);
+
+			if(debug) console.info("t=4");
 			roadController.goFunction();
 			car = roadController.getMap()[1][0];
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(2);
 			expect(car.position).to.be.equal(0.66);
 
-			if(debug) console.info("t=4");
+			if(debug) console.info("t=5");
 			roadController.goFunction();
 			nothing = roadController.getMap()[1][0];
 			expect(nothing).to.be.null;
@@ -199,7 +207,7 @@ describe("Road", function(){
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(2);
 
-			if(debug) console.info("t=5");
+			if(debug) console.info("t=6");
 			roadController.goFunction();
 			nothing = roadController.getMap()[1][1];
 			expect(nothing).to.be.null;
@@ -207,7 +215,7 @@ describe("Road", function(){
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(3);
 
-			if(debug) console.info("t=6");
+			if(debug) console.info("t=7");
 			roadController.goFunction();
 			nothing = roadController.getMap()[1][2];
 			expect(nothing).to.be.null;
@@ -215,14 +223,13 @@ describe("Road", function(){
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(3);
 
-			if(debug) console.info("t=7");
+			if(debug) console.info("t=8");
 			roadController.goFunction();
 			nothing = roadController.getMap()[1][3];
 			expect(nothing).to.be.null;
 			car = roadController.getMap()[1][4];
 			expect(car).to.be.an("object");
 			expect(car.speed).to.be.equal(3);
-
 		});
 
 		it("Se um carro quebra, o carro de tras para", function(){
@@ -512,7 +519,6 @@ describe("Road", function(){
 			expect(car3).to.be.an("object");
 			expect(car3.speed).to.be.equal(0);
 			expect(car3.getI()).to.be.equal(5);
-
 		});
 
 	});

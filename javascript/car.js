@@ -52,11 +52,14 @@ var car = function(){
 	};
 
 	this.slowDown = function() {
-		if(this.status == "s") return;
+		if(this.speed == 0){ 
+			this.status = "s";
+			return;
+		}
 //		console.info("slowing down...");
 		this.speed --;
 		this.calculateAvance();
-		if(this.speed == 0) this.status = "b";
+		this.status = "b";
 	};
 	this.speedUp = function(){
 		if( this.status == "x" ) return;
@@ -71,9 +74,13 @@ var car = function(){
 	};
 	this.hardBreak = function(){
 //		console.info("breaking...")
+		if(this.speed == 0){ 
+			this.status = "s";
+			return;
+		}
 		this.speed = 0;
 		this.calculateAvance();
-		this.status = "s"
+		this.status = "b"
 	}
 	this.changeLane = function(){
 		if( this.status == "x" ) return;
@@ -116,7 +123,7 @@ var car = function(){
 			case "c": prints += "= "; break;
 			case "b": prints += "< "; break;
 			case "a": prints += "> "; break;
-			case "s": prints += "x "; break;
+			case "s": prints += "* "; break;
 		}
 		prints = prints + this.realSpeed();
 		prints = prints + "</span>";
