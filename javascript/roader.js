@@ -14,6 +14,13 @@ function($scope, $interval, $sce){
 	$scope.carstotal = 0; // quantos carros passaram aqui?
 	$scope.carsnow = 0; // quantos carros tem na rua agora?
 	$scope.time = 0; // que horas são?
+	$scope.avg_speed = 0;
+
+	$scope.auto_pause = false;
+
+	// styles
+	$scope.helpclass = false;
+	$scope.fancyCars = true;
 
 	// ok... private variables over here... keep moving... keep moving...
 	var angular_speed = $scope.max_speed / 30; // angular speed. my personal bit of magic.
@@ -21,6 +28,7 @@ function($scope, $interval, $sce){
 	var cars_id = 0; // id do carro. que eu uso pra nada. pra nada.
 	var breaking_distance = 5; // speed cars starts to slow down
 	var updateTime = 300; // frequencia de updates (in ms)
+	var nextPause = 0; // a gente pausa quando chegar aqui
 
 	var map = []; // mapa da via
 	var cet = null; // agente que toma conta do transito (Javascripticamente falando: define e cancela o time interval)
@@ -38,6 +46,7 @@ function($scope, $interval, $sce){
 			cet = $interval(go, updateTime);
 		$scope.playing = !$scope.playing;
 		$scope.reset = false;
+		calculateNextPause();
 	};
 
 	$scope.elapsedTime = function(){
@@ -62,6 +71,15 @@ function($scope, $interval, $sce){
 		odds = odds/100;
 		return (Math.random() < odds);
 	};
+
+
+	var calculateNextPause = function(startAt){
+		var cyclesPerSecond = 1000/updateTime;
+		nextPause = cyclesPerSecond*60;
+		if(startAt) nextPause += startAt;
+		if(nextPause <= $scope.time) calculateNextPause(nextPause);
+	}
+
 
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
 	var chancesToBeSlower = function(l){
@@ -156,6 +174,7 @@ function($scope, $interval, $sce){
 
 		// let's go each cell
 		$scope.carsnow = 0;
+		var sum_speed = 0;
 		for(var l=($scope.lanes-1); l>=0; l--){
 			var lastcar = $scope.size + breaking_distance;
 			for(var i=$scope.size; i>=0; i--){
@@ -164,6 +183,7 @@ function($scope, $interval, $sce){
 //					console.info("car start: speed="+car.speed+", status="+car.status);
 					if(car.status != "x")
 						actionCar(car, l, i);
+					sum_speed += car.speed;
 					lastcar = car.position;
 //					console.info("car end: speed="+car.speed+", status="+car.status);
 				} 
@@ -175,7 +195,11 @@ function($scope, $interval, $sce){
 				}
 			}
 		}
+		$scope.avg_speed = Math.round((sum_speed/$scope.carsnow)*30);
 		$scope.time ++;
+		if($scope.auto_pause)
+			if($scope.time == nextPause) $scope.playpause()
+
 	};
 
 	$scope.setup = function(){

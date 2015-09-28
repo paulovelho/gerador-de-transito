@@ -108,7 +108,7 @@ var car = function(){
 	};
 
 	this.print = function(){
-		var prints = "<span class='car "+this.status+"' style='top: "+this.getTopPostion()+"px'>";
+		var prints = "<span class='car "+this.status+"' style='top: "+this.getTopPostion()+"px'><p>";
 		switch(this.status){
 			case "c": prints += "= "; break;
 			case "b": prints += "< "; break;
@@ -116,7 +116,7 @@ var car = function(){
 			case "s": prints += "x "; break;
 		}
 		prints = prints + this.realSpeed();
-		prints = prints + "</span>";
+		prints = prints + "</p></span>";
 		return prints;
 	}
 

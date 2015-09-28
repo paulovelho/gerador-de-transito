@@ -18,7 +18,7 @@ span.car {
 	position: absolute;
 }
 
-table.table-road.bordered tr{
+table.table-road.help-lines tr{
 	border-bottom: 1px dotted #999;
 }
 	table.table-road tr td {
@@ -31,6 +31,10 @@ table.table-road.bordered tr{
 		text-align: right;
 		padding-left: 10px;
 		padding-right: 5px; 
+		display: none;
+	}
+	table.table-road.help-lines td.index {
+		display: block;
 	}
 	table.table-road td.border {
 		width: 5px;
@@ -43,19 +47,33 @@ table.table-road.bordered tr{
 		width: 30px;
 		border-right: 2px dashed #CCA300;
 	}
-	table.table-road td.index, table.table-road td.road:last-child {
+	table.table-road td.acostamento{
+		width: 5px;
+		background-color: #AAA;
+	}
+	table.table-road td.road:last-child {
 		border-right: 5px solid #AAA;
 	}
 span.car {
 	position: absolute;
 	color: #F00;
-	border: 1px solid red;
+	background-color: #844;
+	border: 1px solid #700;
 	margin-left: -12px;
+	width: 23px;
+	height: 15px;
+	overflow: hidden;
+	text-align: center;
+	transition-property: top;
+	transition-duration: 0.7s;
 }
 	span.car.c { color: #FFF; }
-	span.car.b { color: red; }
-	span.car.a { color: green; }
-	span.car.s { color: yellow; }
+	span.car.b { color: red; border-bottom: 1px solid red; }
+	span.car.a { color: green; border-bottom: 1px solid green; }
+	span.car.s { color: yellow; border-bottom: 1px solid yellow; }
+
+	span.car p { margin: 0; }
+	.fancy-cars span.car p { display: none; }
 
 .data .sign {
 	border-radius: 50%;
