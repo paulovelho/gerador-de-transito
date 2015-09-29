@@ -25,6 +25,7 @@ function($scope, $interval, $sce){
 	// ok... private variables over here... keep moving... keep moving...
 	var angular_speed = $scope.max_speed / 30; // angular speed. my personal bit of magic.
 	var changingLanes = true;
+	var trafiicSeed = 10; // seed of traffic (in percentage)
 	var cars_id = 0; // id do carro. que eu uso pra nada. pra nada.
 	var breaking_distance = 5; // speed cars starts to slow down
 	var updateTime = 300; // frequencia de updates (in ms)
@@ -170,6 +171,8 @@ function($scope, $interval, $sce){
 				// car at max speed. just move.
 				if( moveCar(car, l, i) ){
 					car.frontCarAt(lastcar);
+					if(TheOddsAre(trafiicSeed))
+						car.slowDown();
 				}
 			}
 			return car;

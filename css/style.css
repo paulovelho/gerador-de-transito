@@ -67,10 +67,10 @@ span.car {
 	transition-property: top;
 	transition-duration: 0.7s;
 }
-	span.car.c { color: #FFF; }
-	span.car.b { color: red; border-bottom: 1px solid red; }
+	span.car.c, span.car.n { color: #FFF; }
+	span.car.b { color: yellow; border-bottom: 1px solid yellow; }
 	span.car.a { color: green; border-bottom: 1px solid green; }
-	span.car.s { color: yellow; border-bottom: 1px solid yellow; }
+	span.car.s { color: red; border-bottom: 1px solid red; }
 
 	span.car p { margin: 0; }
 	.fancy-cars span.car p { display: none; }

@@ -120,7 +120,7 @@ var car = function(){
 	this.print = function(){
 		var prints = "<span class='car "+this.status+"' style='top: "+this.getTopPostion()+"px'><p>";
 		switch(this.status){
-			case "c": prints += "= "; break;
+			case "c": case "n": prints += "= "; break;
 			case "b": prints += "< "; break;
 			case "a": prints += "> "; break;
 			case "s": prints += "* "; break;
