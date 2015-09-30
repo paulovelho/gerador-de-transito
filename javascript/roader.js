@@ -25,11 +25,12 @@ function($scope, $interval, $sce){
 	// ok... private variables over here... keep moving... keep moving...
 	var angular_speed = $scope.max_speed / 30; // angular speed. my personal bit of magic.
 	var changingLanes = true;
-	var trafiicSeed = 10; // seed of traffic (in percentage)
+	var trafficSeed = 10; // seed of traffic (in percentage)
 	var cars_id = 0; // id do carro. que eu uso pra nada. pra nada.
 	var breaking_distance = 5; // speed cars starts to slow down
 	var updateTime = 300; // frequencia de updates (in ms)
 	var nextPause = 0; // a gente pausa quando chegar aqui
+	var avoidUnexpectedBehaviour = false; // avoids random action and unexpected behaviour
 
 	var map = []; // mapa da via
 	var cet = null; // agente que toma conta do transito (Javascripticamente falando: define e cancela o time interval)
@@ -69,6 +70,7 @@ function($scope, $interval, $sce){
 	};
 
 	var TheOddsAre = function(odds){
+		if(avoidUnexpectedBehaviour) return false;
 		odds = odds/100;
 		return (Math.random() < odds);
 	};
@@ -140,7 +142,13 @@ function($scope, $interval, $sce){
 		function actionCar(car, l, i){
 			var distance = lastcar - car.position;
 //			console.info("distance: " + distance);
+			var done = false;
 			if(car.speed == 0){
+				if(TheOddsAre(100 - car.patience)){
+					console.info("changing lane! [car "+car.id+", pos:"+l+"."+i+"]");
+					done = car.changeLane();
+				}
+				if(done) return car;
 				if( distance > (car.speed + 1) ){
 					// car stopped. move it!
 					car.speedUp();
@@ -171,7 +179,7 @@ function($scope, $interval, $sce){
 				// car at max speed. just move.
 				if( moveCar(car, l, i) ){
 					car.frontCarAt(lastcar);
-					if(TheOddsAre(trafiicSeed))
+					if(TheOddsAre(car.speed/trafficSeed))
 						car.slowDown();
 				}
 			}
@@ -228,6 +236,10 @@ function($scope, $interval, $sce){
 		$scope.reset = true;
 	};
 
+	$scope.behaveLogically = function(shouldI){
+		avoidUnexpectedBehaviour = shouldI;
+	};
+
 	var initialize = function(){
 		$scope.setup();
 		$scope.resetRoad();
@@ -251,6 +263,7 @@ function($scope, $interval, $sce){
 		this.goFunction = function(){ go(); }
 		this.feedMap = function(m){ map = m; }
 		this.getMap = function(){ return map; }
+		this.doAsExpected = function(){ $scope.behaveLogically(true); }
 	}
 })
 

@@ -8,6 +8,7 @@ describe("Road", function(){
 		$controller = _$controller_;
 		scope.isTest = true;
 		roadController = $controller("roadController", { $scope: scope });
+		roadController.doAsExpected();
 	}));
 
 	it("os testes tem que funfar", function(){
