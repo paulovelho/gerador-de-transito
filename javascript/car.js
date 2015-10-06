@@ -93,7 +93,6 @@ var car = function(){
 		if( this.speed > 1 ) return false;
 		this.lane++;
 		this.hardBreak();
-		console.info("change lane ok");
 		return true;
 	}
 

@@ -184,7 +184,6 @@ function($scope, $interval, $sce){
 			var done = false;
 			if(car.speed == 0){
 				if(TheOddsAre(100 - car.patience)){
-					console.info("changing lane! [car "+car.id+", pos:"+l+"."+i+"]");
 					done = car.changeLane();
 				}
 				if(done) return car;
