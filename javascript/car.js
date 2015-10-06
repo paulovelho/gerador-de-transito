@@ -93,6 +93,7 @@ var car = function(){
 		if( this.speed > 1 ) return false;
 		this.lane++;
 		this.hardBreak();
+		console.info("change lane ok");
 		return true;
 	}
 
@@ -125,15 +126,17 @@ var car = function(){
 	};
 
 	this.print = function(){
-		var prints = "<span class='car "+this.status+"' style='top: "+this.getTopPostion()+"px'><p>";
+		var prints = "<span class='car "+this.status+"' id='car"+this.id+"' style='top: "+this.getTopPostion()+"px'><p>";
 		switch(this.status){
 			case "c": case "n": prints += "= "; break;
 			case "b": prints += "< "; break;
 			case "a": prints += "> "; break;
 			case "s": prints += "* "; break;
 		}
-		prints = prints + this.realSpeed();
-		prints = prints + "</p></span>";
+		prints += this.realSpeed();
+		prints += "</p>";
+		if(this.status == "x") prints += "--";
+		prints += "</span>";
 		return prints;
 	}
 

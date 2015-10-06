@@ -17,24 +17,30 @@
 					</div>
 				</div>			
 				<div class="row ng-controls-reseters" ng-show="reset">
-					<div class="col-sm-4 col-md-4">
+					<div class="col-sm-3 col-xs-6">
 						Velocidade máxima:<br/>
 						<input type="radio" name="set_max_speed" ng-model="max_speed" value="30" class="haddad-pen" /> 30km/h<br/>
 						<input type="radio" name="set_max_speed" ng-model="max_speed" value="60" class="haddad-pen" /> 60km/h<br/>
 						<input type="radio" name="set_max_speed" ng-model="max_speed" value="90" class="haddad-pen" /> 90km/h<br/>
 					</div>
-					<div class="col-sm-4 col-md-4">
+					<div class="col-sm-3 col-xs-6">
 						Faixas:<br/>
 						<input type="radio" name="set_lanes" ng-model="lanes" value="3" class="haddad-pen" /> 3<br/>
 						<input type="radio" name="set_lanes" ng-model="lanes" value="4" class="haddad-pen" /> 4<br/>
 						<input type="radio" name="set_lanes" ng-model="lanes" value="5" class="haddad-pen" /> 5<br/>
 					</div>
-					<div class="col-sm-4 col-md-4">
+					<div class="col-sm-3 col-xs-6">
 						Extensão da via:<br/>
 						<input type="radio" name="set_size" ng-model="size" value="40" class="haddad-pen" /> 1 km<br/>
 						<input type="radio" name="set_size" ng-model="size" value="60" class="haddad-pen" /> 1,5 km<br/>
 						<input type="radio" name="set_size" ng-model="size" value="80" class="haddad-pen" /> 2 km<br/>
 						<input type="radio" name="set_size" ng-model="size" value="120" class="haddad-pen" /> 3 km<br/>
+					</div>
+					<div class="col-sm-3 col-xs-6">
+						Comportamento:<br/>
+						<input type="checkbox" ng-model="gargalo" /> Adicionar carro quebrado (gargalo)
+						<br/><br/>
+						<input type="checkbox" ng-model="avoidUnexpectedBehaviour" /> Mundo Ideal
 					</div>
 				</div>
 				<div class="row ng-controls">

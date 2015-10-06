@@ -17,6 +17,8 @@ function($scope, $interval, $sce){
 	$scope.avg_speed = 0;
 
 	$scope.auto_pause = false;
+	$scope.avoidUnexpectedBehaviour = false; // avoids random action and unexpected behaviour
+	$scope.gargalo = false
 
 	// styles
 	$scope.helpclass = false;
@@ -30,7 +32,6 @@ function($scope, $interval, $sce){
 	var breaking_distance = 5; // speed cars starts to slow down
 	var updateTime = 300; // frequencia de updates (in ms)
 	var nextPause = 0; // a gente pausa quando chegar aqui
-	var avoidUnexpectedBehaviour = false; // avoids random action and unexpected behaviour
 
 	var map = []; // mapa da via
 	var cet = null; // agente que toma conta do transito (Javascripticamente falando: define e cancela o time interval)
@@ -53,7 +54,6 @@ function($scope, $interval, $sce){
 
 	$scope.elapsedTime = function(){
 		var time = Math.floor($scope.time * updateTime/1000);
-//		var time = $scope.time;
 		var minutes = Math.floor(time/60);
 		var seconds = time - (minutes * 60);
 		if(minutes == 0) minutes = "";
@@ -69,8 +69,48 @@ function($scope, $interval, $sce){
 		$scope.setup()
 	};
 
-	var TheOddsAre = function(odds){
-		if(avoidUnexpectedBehaviour) return false;
+	$scope.setup = function(){
+		angular_speed = $scope.max_speed / 30;
+		breaking_distance = angular_speed;
+	};
+
+	$scope.resetRoad = function(){
+		map = [];
+		for(var i=0;i<$scope.lanes;i++){
+			var lane = [];
+			for(var j=0;j<$scope.size;j++){
+				lane[j] = null;
+			}
+			map.push(lane)
+		}
+		putGargalo();
+		$scope.carstotal = 0;
+		$scope.carsnow = 0;
+		$scope.time = 0;
+		$scope.reset = true;
+	};
+
+	$scope.behaveLogically = function(shouldI){
+		$scope.avoidUnexpectedBehaviour = shouldI;
+	};
+
+	var putGargalo = function(){
+		var putAt = Math.floor($scope.size/3*2);
+		if($scope.gargalo){
+			var c = new car();
+			c.start(-1, angular_speed, 0);
+			c.setPosition(putAt);
+			c.broken();
+			$scope.carsnow++;
+			map[0][putAt] = c;
+		} else {
+			map[0][putAt] = null;
+		}
+
+	}
+
+	var TheOddsAre = function(odds, giveMeAlways){
+		if($scope.avoidUnexpectedBehaviour && !giveMeAlways) return false;
 		odds = odds/100;
 		return (Math.random() < odds);
 	};
@@ -82,7 +122,6 @@ function($scope, $interval, $sce){
 		if(startAt) nextPause += startAt;
 		if(nextPause <= $scope.time) calculateNextPause(nextPause);
 	}
-
 
 	// function to calculate chance for a car to be slower depending on his lane (from helper.js)
 	var chancesToBeSlower = function(l){
@@ -203,7 +242,7 @@ function($scope, $interval, $sce){
 				} 
 			}
 			if(lastcar > breaking_distance){
-				if(TheOddsAre($scope.flux)){
+				if(TheOddsAre($scope.flux, true)){
 					map[l][0] = newCar(l);
 					$scope.carsnow ++;
 				}
@@ -214,30 +253,6 @@ function($scope, $interval, $sce){
 		if($scope.auto_pause)
 			if($scope.time == nextPause) $scope.playpause()
 
-	};
-
-	$scope.setup = function(){
-		angular_speed = $scope.max_speed / 30;
-		breaking_distance = angular_speed;
-	};
-
-	$scope.resetRoad = function(){
-		map = [];
-		for(var i=0;i<$scope.lanes;i++){
-			var lane = [];
-			for(var j=0;j<$scope.size;j++){
-				lane[j] = null;
-			}
-			map.push(lane)
-		}
-		$scope.carstotal = 0;
-		$scope.carsnow = 0;
-		$scope.time = 0;
-		$scope.reset = true;
-	};
-
-	$scope.behaveLogically = function(shouldI){
-		avoidUnexpectedBehaviour = shouldI;
 	};
 
 	var initialize = function(){
@@ -251,6 +266,7 @@ function($scope, $interval, $sce){
 	if(!$scope.isTest){
 		$scope.$watch("[lanes, size]", $scope.resetRoad, true);
 		$scope.$watch("max_speed", $scope.setup, true);
+		$scope.$watch("gargalo", putGargalo, true);
 	} else {
 		// test functions:
 		this.chancesToBeSlowerFunction = function(lane){ return chancesToBeSlower(lane) };
