@@ -72,6 +72,9 @@ span.car {
 	span.car.a { color: green; border-bottom: 1px solid green; }
 	span.car.s { color: red; border-bottom: 1px solid red; }
 
+	span.car.seta { border-right: 1px solid #F2FF00; }
+	span.car.tired { border-right: 1px solid #FF8800; }
+
 	span.car p { margin: 0; }
 	.fancy-cars span.car p { display: none; }
 

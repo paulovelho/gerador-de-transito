@@ -170,7 +170,7 @@ function($scope, $interval, $sce){
 			if(!changingLanes) return false;
 			if(l == $scope.lanes-1) return false;
 			var left = (l+1);
-			for(var j=(i-2); j<=(i+1); j++){ // 2 spaces before, one space after
+			for(var j=(i-1); j<=(i+1); j++){ // 2 spaces before, one space after
 				if( map[left][j] != null){
 					return false;	
 				} 
@@ -178,13 +178,25 @@ function($scope, $interval, $sce){
 			return true;
 		}
 
+		function changeLane(car, l, i){
+			if(car.changeLane()){
+				map[l][i] = null;
+				map[car.lane][i] = car;
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		function actionCar(car, l, i){
 			var distance = lastcar - car.position;
 //			console.info("distance: " + distance);
 			var done = false;
 			if(car.speed == 0){
-				if(TheOddsAre(100 - car.patience)){
-					done = car.changeLane();
+				if(car.patience < 30){
+					if(canIMoveLeft(l, i)){
+						done = changeLane(car, l, i);
+					}
 				}
 				if(done) return car;
 				if( distance > (car.speed + 1) ){
@@ -193,9 +205,7 @@ function($scope, $interval, $sce){
 				} else {
 					// no way to move. Let's try to move the car to left:
 					if(canIMoveLeft(l, i)){
-						car.changeLane();
-						map[l][i] = null;
-						map[car.lane][i] = car;
+						changeLane(car, l, i);
 					} else {
 						car.hardBreak();
 					}
@@ -210,6 +220,12 @@ function($scope, $interval, $sce){
 							car.speedUp();
 						}
 					} else {
+						if(car.patience < 30){
+							if(canIMoveLeft(l, i)){
+								done = changeLane(car, l, i);
+							}
+						}
+						if(done) return car;
 						car.slowDown();
 					}
 				}
@@ -234,7 +250,7 @@ function($scope, $interval, $sce){
 				if(car){
 //					console.info("car start: speed="+car.speed+", status="+car.status);
 					if(car.status != "x")
-						actionCar(car, l, i);
+						car = actionCar(car, l, i);
 					sum_speed += car.speed;
 					lastcar = car.position;
 //					console.info("car end: speed="+car.speed+", status="+car.status);

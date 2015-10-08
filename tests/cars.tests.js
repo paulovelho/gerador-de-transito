@@ -30,14 +30,13 @@ describe("Cars", function(){
 		it("changing lanes", function(){
 			var c = new car();
 			c.start(1, 3, 1);
-			// car can't change lane if too fast
-			c.changeLane();
-			expect(c.lane).to.be.equal(1);
-			c.slowDown();
-			c.slowDown();
 			c.changeLane();
 			expect(c.lane).to.be.equal(2);
-			expect(c.speed).to.be.equal(0);
+			expect(c.speed).to.be.equal(1);
+			// if just changed the lane, will not change again!
+			c.changeLane();
+			expect(c.lane).to.be.equal(2);
+			expect(c.speed).to.be.equal(1);
 		})
 
 		it("car nao pode correr mais que sua propria velocidade maxima", function(){

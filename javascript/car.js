@@ -11,7 +11,7 @@ var car = function(){
 
 	this.position = 0;
 	this.lane = 0;
-	this.patience = 90;
+	this.patience = 75;
 
 	this.roundPosition = function(val){
 		var parte_inteira = Math.floor(val);
@@ -60,7 +60,7 @@ var car = function(){
 		}
 //		console.info("slowing down...");
 		this.speed --;
-		this.patience = this.patience - (5 + this.speed);
+		this.patience = this.patience - (10 + this.speed);
 		this.calculateAvance();
 		this.status = "b";
 	};
@@ -89,10 +89,13 @@ var car = function(){
 		this.status = "b"
 	}
 	this.changeLane = function(){
-		if( this.status == "x" ) return false;
-		if( this.speed > 1 ) return false;
+		if( this.status == "x" || this.status == "n" ) return false;
 		this.lane++;
-		this.hardBreak();
+		this.slowDown();
+		this.slowDown();
+		if(this.patience < 0) this.patience = 0;
+		this.patience += 50;
+		this.status = "n";
 		return true;
 	}
 
@@ -125,7 +128,12 @@ var car = function(){
 	};
 
 	this.print = function(){
-		var prints = "<span class='car "+this.status+"' id='car"+this.id+"' style='top: "+this.getTopPostion()+"px'><p>";
+
+		var patienceClass = "";
+		if(this.patience < 50) patienceClass = "tired";
+		if(this.patience < 30) patienceClass = "seta";
+
+		var prints = "<span class='car "+this.status+" "+patienceClass+"' id='car"+this.id+"' style='top: "+this.getTopPostion()+"px'><p>";
 		switch(this.status){
 			case "c": case "n": prints += "= "; break;
 			case "b": prints += "< "; break;
@@ -147,6 +155,8 @@ var car = function(){
 		this.speed = max_speed;
 //		if(id == 2) this.speed --;
 		this.calculateAvance();
+		// paciencia do motorista começa entre 90 e 60
+		this.patience = Math.floor(Math.random() * (90 - 60 + 1)) + 60;
 		return this;
 	};
 };
