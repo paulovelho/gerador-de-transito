@@ -53,6 +53,8 @@
 				<br/><hr/><br/>
 				<div class="row">
 					<div class="col-sm-6 col-md-4">
+						{{lanes}} faixas<br/>
+						{{size * 20 * 1.25}}m de pista<br/>
 						Tempo: {{elapsedTime()}}<br/>
 						Fluxo: {{flux}} %<br/>
 					</div>
@@ -60,6 +62,8 @@
 						Carros na pista: {{carsnow}}<br/>
 						Total de carros: {{carstotal}}<br/>
 						Velocidade Média: {{avg_speed}} km/h<br/>
+						{{(avoidUnexpectedBehaviour ? "Mundo Ideal" : "")}}<br/>
+						<span style="color: red">{{(gargalo ? "Carro quebrado na pista" : "")}}</span><br/>
 					</div>
 					<div class="col-sm-12 col-md-2"> 
 						<div class="sign">{{max_speed}}</div>
