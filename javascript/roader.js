@@ -1,7 +1,7 @@
 angular
 .module("nrt-roads")
 .controller("roadController",
-function($scope, $interval, $sce){
+function($scope, $rootScope, $interval, $sce){
 	
 	// variables:
 	$scope.size = 30; // cada size unit = 20px. cada pixel = 1.25m. faz as contas, cara.
@@ -48,6 +48,7 @@ function($scope, $interval, $sce){
 		else
 			cet = $interval(go, updateTime);
 		$scope.playing = !$scope.playing;
+		$scope.$parent.playing = $scope.playing;
 		$scope.reset = false;
 		calculateNextPause();
 	};
@@ -265,6 +266,10 @@ function($scope, $interval, $sce){
 		}
 		$scope.avg_speed = Math.round((sum_speed/$scope.carsnow)*30);
 		$scope.time ++;
+		$scope._time = $scope.elapsedTime();
+
+		$scope.$parent._time = $scope.elapsedTime();
+
 		if($scope.auto_pause)
 			if($scope.time == nextPause) $scope.playpause()
 
@@ -296,6 +301,16 @@ function($scope, $interval, $sce){
 		this.getMap = function(){ return map; }
 		this.doAsExpected = function(){ $scope.behaveLogically(true); }
 	}
+
+	// interaction events
+	$scope.$on("play-pause", function(){ $scope.playpause(); });
+	$scope.$on("reset-road", function(){ $scope.resetRoad(); });
+	$scope.$on("set-size", function(ev, v){ $scope.size = v; });
+	$scope.$on("set-flux", function(ev, v){ $scope.flux = v; });
+	$scope.$on("set-lanes", function(ev, v){ $scope.lanes = v; });
+
+	$scope.$on("set-gargalo", function(ev, v){ $scope.gargalo = v; });
+	$scope.$on("mundo-ideal", function(ev, v){ $scope.behaveLogically(v); });
 })
 
 .filter('range', function() {

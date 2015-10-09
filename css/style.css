@@ -78,12 +78,13 @@ span.car {
 	span.car p { margin: 0; }
 	.fancy-cars span.car p { display: none; }
 
-.data .sign {
+.sign {
 	border-radius: 50%;
 	width: 75px;
 	height: 75px;
 	text-align: center;
 	padding-top: 5px;
+	margin-left: 40px;
 	border: 10px solid red;
 	font-weight: bold;
 	font-size: 30px;
