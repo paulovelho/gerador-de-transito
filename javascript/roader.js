@@ -310,6 +310,7 @@ function($scope, $rootScope, $interval, $sce){
 	$scope.$on("set-lanes", function(ev, v){ $scope.lanes = v; });
 
 	$scope.$on("set-gargalo", function(ev, v){ $scope.gargalo = v; });
+	$scope.$on("auto-pause", function(ev, v){ $scope.auto_pause = v; });
 	$scope.$on("mundo-ideal", function(ev, v){ $scope.behaveLogically(v); });
 })
 
